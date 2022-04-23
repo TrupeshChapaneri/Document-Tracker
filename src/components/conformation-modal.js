@@ -7,6 +7,13 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
+
+/**
+ * @component
+ * @example
+ * <ConformationModal onClickYes={() => {}} isOpen={deleteModal} modalHeader="Text" onClose={() => {}} />
+ */
 
 function ConformationModal({ isOpen, onClose, onClickYes, modalHeader }) {
   return (
@@ -18,10 +25,10 @@ function ConformationModal({ isOpen, onClose, onClickYes, modalHeader }) {
       <DialogActions>
         <Button onClick={onClose}>No</Button>
         <Button
-          variant="contained"
           autoFocus
-          onClick={onClickYes}
           color="primary"
+          variant="contained"
+          onClick={onClickYes}
         >
           Yes
         </Button>
@@ -29,5 +36,12 @@ function ConformationModal({ isOpen, onClose, onClickYes, modalHeader }) {
     </Dialog>
   );
 }
+
+ConformationModal.prototype = {
+  isOpen: PropTypes.bool.isRequired,
+  modalHeader: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired.isRequired,
+  onClickYes: PropTypes.func.isRequired,
+};
 
 export { ConformationModal };

@@ -15,6 +15,13 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
+import PropTypes from "prop-types";
+
+/**
+ * @component
+ * @example
+ * <DocDetails {...{ setAddDoc }} />
+ */
 
 function DocDetails({ setAddDoc }) {
   const dispatch = useDispatch();
@@ -177,5 +184,9 @@ function DocDetails({ setAddDoc }) {
     </React.Fragment>
   );
 }
+
+DocDetails.prototype = {
+  setAddDoc: PropTypes.func.isRequired.isRequired,
+};
 
 export { DocDetails };

@@ -14,6 +14,12 @@ import { logoutUser } from "redux/actions/auth-action";
 import { clearAppData } from "redux/actions/document-action";
 import { ConformationModal } from "./conformation-modal";
 
+/**
+ * @component
+ * @example
+ * <Header />
+ */
+
 function Header() {
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState(false);

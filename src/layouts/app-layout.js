@@ -1,6 +1,6 @@
 import { Container } from "@material-ui/core";
 import { Header } from "components/header";
-
+import PropTypes from "prop-types";
 function AppLayout({ children }) {
   return (
     <>
@@ -11,5 +11,9 @@ function AppLayout({ children }) {
     </>
   );
 }
+
+AppLayout.propTypes = {
+  children: PropTypes.element.isRequired,
+};
 
 export { AppLayout };
