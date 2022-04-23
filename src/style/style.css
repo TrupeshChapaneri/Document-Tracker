@@ -1,14 +1,7 @@
 .container-main {
-  display: "flex";
-  justify-content: center;
+  height: 100vh;
   padding: 90px 0 50px;
-  max-width: 1000px;
-}
-.container-main-width {
-  max-width: 1000px;
-}
-.app-body {
-  padding: 90px 0 0;
+  /* max-width: 1000px; */
 }
 .d-flex {
   display: flex;
@@ -71,4 +64,7 @@
 }
 .user-avtar {
   margin: 0 20px;
+}
+.MuiFormHelperText-contained {
+  margin-left: 0 !important;
 }

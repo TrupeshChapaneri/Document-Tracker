@@ -5,7 +5,7 @@ function AppLayout({ children }) {
   return (
     <>
       <Header />
-      <Container className="container-main-width app-body">
+      <Container maxWidth="lg" className="container-main">
         {children}
       </Container>
     </>

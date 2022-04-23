@@ -1,5 +1,4 @@
-// import {  } from "@material-ui/core";
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box } from "@material-ui/core";
 import React from "react";
 
 function LoadingData() {

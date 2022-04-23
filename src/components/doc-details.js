@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from "react";
 import Joi from "joi";
 import { Box, Button, Typography, TextField } from "@material-ui/core";
@@ -38,7 +37,7 @@ function DocDetails({ setAddDoc }) {
           .required()
           .min(1)
           .max(120)
-          .label("description"),
+          .label("Description"),
       })
     ),
     defaultValues: {
@@ -122,7 +121,7 @@ function DocDetails({ setAddDoc }) {
             Cancel
           </Button>
           <Button
-            style={{ marginLeft: "30px" }}
+            style={{ marginLeft: "20px" }}
             color="primary"
             variant="contained"
             onClick={handleSubmit(submitForm)}

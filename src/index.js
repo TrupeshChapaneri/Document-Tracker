@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import CssBaseline from "@mui/material/CssBaseline";
 import App from "./App";
 import store from "./redux/store";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme/index";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import "./style/style.css";
 import "react-toastify/dist/ReactToastify.css";
 
