@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Joi from "joi";
 import { Box, Button, Typography, TextField } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
-import { removeDoubleQuotes } from "utils/utils";
+import { delayedAction, removeDoubleQuotes } from "utils/utils";
 import { joiResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -14,7 +14,6 @@ import {
 } from "redux/actions/document-action";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import PropTypes from "prop-types";
 import { ConformationModal } from "./conformation-modal";
@@ -29,7 +28,6 @@ function DocDetails({ setAddDoc }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id: editId } = useParams();
-
   const [deleteModal, setDeleteModal] = useState(false);
 
   const { singleDocument = {} } = useSelector((state) => state.documentReducer);
@@ -82,14 +80,17 @@ function DocDetails({ setAddDoc }) {
         isEdited: true,
       };
 
-      dispatch(isLoadingTrue());
-      history.push("/home");
-
-      setTimeout(() => {
-        dispatch(isLoadingFalse());
-        dispatch(updateDocument(payload));
-        toast("Document Update");
-      }, 1000);
+      delayedAction({
+        startLoader: () => {
+          dispatch(isLoadingTrue());
+          history.push("/home");
+        },
+        onSucces: () => {
+          dispatch(isLoadingFalse());
+          dispatch(updateDocument(payload));
+        },
+        setToast: "Document Update",
+      });
       return;
     }
 
@@ -100,14 +101,17 @@ function DocDetails({ setAddDoc }) {
         isEdited: false,
       };
 
-      dispatch(isLoadingTrue());
-
-      setTimeout(() => {
-        dispatch(isLoadingFalse());
-        dispatch(addDocument(payload));
-        toast("Document Added");
-        setAddDoc(false);
-      }, 1000);
+      delayedAction({
+        startLoader: () => {
+          dispatch(isLoadingTrue());
+        },
+        onSucces: () => {
+          setAddDoc(false);
+          dispatch(isLoadingFalse());
+          dispatch(addDocument(payload));
+        },
+        setToast: "Document Added",
+      });
       return;
     }
   };
@@ -120,11 +124,7 @@ function DocDetails({ setAddDoc }) {
         </Typography>
         <div>
           {editId && (
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => setDeleteModal(true)}
-            >
+            <Button variant="outlined" onClick={() => setDeleteModal(true)}>
               Delete
             </Button>
           )}
@@ -197,16 +197,18 @@ function DocDetails({ setAddDoc }) {
       {deleteModal && (
         <ConformationModal
           onClickYes={() => {
-            dispatch(isLoadingTrue());
-            setDeleteModal(false);
-            history.push("/home");
-
-            setTimeout(() => {
-              dispatch(isLoadingFalse());
-              dispatch(deleteDocument(editId));
-
-              toast("Document Deleted");
-            }, 1000);
+            delayedAction({
+              startLoader: () => {
+                dispatch(isLoadingTrue());
+                setDeleteModal(false);
+                history.push("/home");
+              },
+              onSucces: () => {
+                dispatch(isLoadingFalse());
+                dispatch(deleteDocument(editId));
+              },
+              setToast: "Document Deleted",
+            });
           }}
           isOpen={deleteModal}
           modalHeader="Are you sure you want to Delete Document"
@@ -218,7 +220,7 @@ function DocDetails({ setAddDoc }) {
 }
 
 DocDetails.prototype = {
-  setAddDoc: PropTypes.func.isRequired.isRequired,
+  setAddDoc: PropTypes.func.isRequired,
 };
 
 export { DocDetails };

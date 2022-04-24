@@ -8,10 +8,10 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import { logoutUser } from "redux/actions/auth-action";
 import { clearAppData } from "redux/actions/document-action";
+import { delayedAction } from "utils/utils";
 import { ConformationModal } from "./conformation-modal";
 
 /**
@@ -46,20 +46,22 @@ function Header() {
         {logoutModal && (
           <ConformationModal
             onClickYes={() => {
-              dispatch(isLoadingTrue());
-              setLogoutModal(false);
-              setTimeout(() => {
-                dispatch(isLoadingFalse());
-                dispatch(logoutUser());
-                dispatch(clearAppData());
-                toast("User Logout");
-              }, 1000);
+              delayedAction({
+                startLoader: () => {
+                  dispatch(isLoadingTrue());
+                  setLogoutModal(false);
+                },
+                onSucces: () => {
+                  dispatch(isLoadingFalse());
+                  dispatch(logoutUser());
+                  dispatch(clearAppData());
+                },
+                setToast: "User Logout",
+              });
             }}
             isOpen={logoutModal}
             modalHeader="Are you sure you want to Logout"
-            onClose={() => {
-              setLogoutModal(false);
-            }}
+            onClose={() => setLogoutModal(false)}
           />
         )}
       </Container>

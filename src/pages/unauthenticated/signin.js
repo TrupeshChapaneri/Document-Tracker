@@ -6,7 +6,7 @@ import { joiResolver } from "@hookform/resolvers";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "redux/actions/auth-action";
-import { removeDoubleQuotes } from "utils/utils";
+import { delayedAction, removeDoubleQuotes } from "utils/utils";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import { LoadingData } from "components/loading-data";
 import { useIsLoading } from "hooks/useIsLoading";
@@ -34,12 +34,16 @@ function SignIn() {
   });
 
   const onSignIn = (data) => {
-    dispatch(isLoadingTrue());
-
-    setTimeout(() => {
-      dispatch(isLoadingFalse());
-      dispatch(loginUser(data));
-    }, 1000);
+    delayedAction({
+      startLoader: () => {
+        dispatch(isLoadingTrue());
+      },
+      onSucces: () => {
+        dispatch(isLoadingFalse());
+        dispatch(loginUser(data));
+      },
+      showToast: false,
+    });
   };
 
   if (isAppLoading) {

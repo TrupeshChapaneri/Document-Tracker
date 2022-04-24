@@ -30,10 +30,10 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { ConformationModal } from "components/conformation-modal";
-import { toast } from "react-toastify";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import { useIsLoading } from "hooks/useIsLoading";
 import { LoadingData } from "components/loading-data";
+import { delayedAction } from "utils/utils";
 
 function DocList() {
   const history = useHistory();
@@ -188,15 +188,18 @@ function DocList() {
       {deleteModal && (
         <ConformationModal
           onClickYes={() => {
-            dispatch(isLoadingTrue());
-
-            setTimeout(() => {
-              dispatch(isLoadingFalse());
-              dispatch(deleteDocument(editId));
-              setDeleteModal(false);
-              setEditId(null);
-              toast("Document Deleted");
-            }, 1000);
+            delayedAction({
+              startLoader: () => {
+                dispatch(isLoadingTrue());
+              },
+              onSucces: () => {
+                dispatch(isLoadingFalse());
+                dispatch(deleteDocument(editId));
+                setDeleteModal(false);
+                setEditId(null);
+              },
+              setToast: "Document Deleted",
+            });
           }}
           isOpen={deleteModal}
           modalHeader="Are you sure you want to Delete Document"

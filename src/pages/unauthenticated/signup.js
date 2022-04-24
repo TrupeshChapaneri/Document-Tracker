@@ -7,8 +7,7 @@ import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { signUpUser } from "redux/actions/auth-action";
-import { removeDoubleQuotes } from "utils/utils";
-import { toast } from "react-toastify";
+import { delayedAction, removeDoubleQuotes } from "utils/utils";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import { LoadingData } from "components/loading-data";
 import { useIsLoading } from "hooks/useIsLoading";
@@ -38,12 +37,17 @@ function SignUp() {
       ...data,
       userId: uuidv4(),
     };
-    dispatch(isLoadingTrue());
-    setTimeout(() => {
-      dispatch(isLoadingFalse());
-      dispatch(signUpUser(payload));
-      toast("New User Created");
-    }, 1000);
+
+    delayedAction({
+      startLoader: () => {
+        dispatch(isLoadingTrue());
+      },
+      onSucces: () => {
+        dispatch(isLoadingFalse());
+        dispatch(signUpUser(payload));
+      },
+      setToast: "New User Created",
+    });
   };
 
   if (isAppLoading) {
