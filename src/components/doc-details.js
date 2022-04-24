@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Joi from "joi";
 import { Box, Button, Typography, TextField } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   addDocument,
   clearSingleDocument,
+  deleteDocument,
   updateDocument,
 } from "redux/actions/document-action";
 import { useParams } from "react-router-dom";
@@ -16,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isLoadingFalse, isLoadingTrue } from "redux/actions/app-loader";
 import PropTypes from "prop-types";
+import { ConformationModal } from "./conformation-modal";
 
 /**
  * @component
@@ -27,6 +29,8 @@ function DocDetails({ setAddDoc }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id: editId } = useParams();
+
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const { singleDocument = {} } = useSelector((state) => state.documentReducer);
 
@@ -117,6 +121,16 @@ function DocDetails({ setAddDoc }) {
         <div>
           <Button
             variant="outlined"
+            color="error"
+            onClick={() => {
+              if (editId) setDeleteModal(true);
+            }}
+          >
+            Delete
+          </Button>
+          <Button
+            style={{ margin: "0 20px" }}
+            variant="outlined"
             onClick={() => {
               if (editId) {
                 history.push("/home");
@@ -128,7 +142,6 @@ function DocDetails({ setAddDoc }) {
             Cancel
           </Button>
           <Button
-            style={{ marginLeft: "20px" }}
             color="primary"
             variant="contained"
             onClick={handleSubmit(submitForm)}
@@ -181,6 +194,25 @@ function DocDetails({ setAddDoc }) {
           )}
         />
       </form>
+      {deleteModal && (
+        <ConformationModal
+          onClickYes={() => {
+            dispatch(isLoadingTrue());
+            setDeleteModal(false);
+            history.push("/home");
+
+            setTimeout(() => {
+              dispatch(isLoadingFalse());
+              dispatch(deleteDocument(editId));
+
+              toast("Document Deleted");
+            }, 1000);
+          }}
+          isOpen={deleteModal}
+          modalHeader="Are you sure you want to Delete Document"
+          onClose={() => setDeleteModal(false)}
+        />
+      )}
     </React.Fragment>
   );
 }
