@@ -42,11 +42,11 @@ function DocDetails({ setAddDoc }) {
     shouldUnregister: false,
     resolver: joiResolver(
       Joi.object({
-        title: Joi.string().trim().required().min(1).max(30).label("Title"),
+        title: Joi.string().trim().required().min(5).max(30).label("Title"),
         description: Joi.string()
           .trim()
           .required()
-          .min(1)
+          .min(10)
           .max(120)
           .label("Description"),
       })
@@ -119,15 +119,15 @@ function DocDetails({ setAddDoc }) {
           {editId ? "Update" : "Add"} Document
         </Typography>
         <div>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              if (editId) setDeleteModal(true);
-            }}
-          >
-            Delete
-          </Button>
+          {editId && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => setDeleteModal(true)}
+            >
+              Delete
+            </Button>
+          )}
           <Button
             style={{ margin: "0 20px" }}
             variant="outlined"
