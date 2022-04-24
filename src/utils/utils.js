@@ -10,7 +10,7 @@ export const delayedAction = ({
   setTimeout(() => {
     onSucces();
     if (showToast) toast(setToast);
-  }, 1000);
+  }, 2000);
 };
 
 export const removeDoubleQuotes = (string) => {
