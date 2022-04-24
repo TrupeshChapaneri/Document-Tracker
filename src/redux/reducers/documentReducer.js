@@ -7,6 +7,8 @@ import {
   DELETE_DOCUMENT_LIST,
   GET_DOCUMENT_LIST,
   GET_SINGLE_DOCUMENT,
+  TITLE_SORT_ASC,
+  TITLE_SORT_DESC,
   UPDATE_DOCUMENT_LIST,
 } from "redux/types";
 
@@ -59,6 +61,32 @@ export default function (state = initialState, action) {
       return {
         ...state,
         documentList: state.documentList.filter((doc) => doc.id !== action.id),
+      };
+    }
+
+    case TITLE_SORT_ASC: {
+      const sortedData = state.documentList.sort(function (a, b) {
+        const titleA = a?.title?.toUpperCase();
+        const titleB = b?.title?.toUpperCase();
+        return titleA === titleB ? 0 : titleA > titleB ? 1 : -1;
+      });
+
+      return {
+        ...state,
+        documentList: sortedData,
+      };
+    }
+
+    case TITLE_SORT_DESC: {
+      const sortedData = state.documentList.sort(function (a, b) {
+        const titleA = a?.title?.toUpperCase();
+        const titleB = b?.title?.toUpperCase();
+        return titleA === titleB ? 0 : titleA > titleB ? -1 : 1;
+      });
+
+      return {
+        ...state,
+        documentList: sortedData,
       };
     }
 

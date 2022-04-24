@@ -5,6 +5,8 @@ import {
   DELETE_DOCUMENT_LIST,
   GET_DOCUMENT_LIST,
   GET_SINGLE_DOCUMENT,
+  TITLE_SORT_ASC,
+  TITLE_SORT_DESC,
   UPDATE_DOCUMENT_LIST,
 } from "redux/types";
 
@@ -51,5 +53,17 @@ export function clearSingleDocument() {
 export function clearAppData() {
   return {
     type: CLEAR_APP_DATA,
+  };
+}
+
+export function titleSortAsc() {
+  return {
+    type: TITLE_SORT_ASC,
+  };
+}
+
+export function titleSortDesc() {
+  return {
+    type: TITLE_SORT_DESC,
   };
 }
